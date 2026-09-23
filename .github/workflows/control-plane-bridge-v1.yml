@@ -1,0 +1,34 @@
+name: Control Plane Bridge V1
+on:
+  push:
+    paths:
+      - 'bridge/requests/*.json'
+      - 'bridge/worker_v1.py'
+      - '.github/workflows/control-plane-bridge-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select newest bridge request
+        id: req
+        run: |
+          set -euo pipefail
+          req=$(ls -1t bridge/requests/*.json | head -n1)
+          echo "path=$req" >> "$GITHUB_OUTPUT"
+          echo "REQUEST=$req"
+      - name: Execute farm worker
+        run: python bridge/worker_v1.py "${{ steps.req.outputs.path }}"
+      - name: Compute artifact SHA
+        id: sha
+        run: |
+          sha=$(sha256sum bridge/artifacts/farm-result.json | awk '{print $1}')
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "ARTIFACT_SHA=$sha"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: farm-123-bridge-result
+          path: bridge/artifacts/farm-result.json
