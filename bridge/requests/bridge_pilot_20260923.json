@@ -1,0 +1,13 @@
+{
+  "mission_id": "bridge_pilot_20260923",
+  "task_id": "task_f123_bridge_v1",
+  "farm_id": 123,
+  "operation": "hohmann_reference",
+  "payload": {
+    "mu_m3_s2": 398600441800000,
+    "r1_m": 6778000,
+    "r2_m": 42164000
+  },
+  "input_sha": "e37e42af4b3aa140d3a2040e210e339adb9797c1554af668a9bbb4c949b8b682",
+  "requested_at": "2026-09-23T19:00:00Z"
+}
