@@ -1,0 +1,21 @@
+name: F123 External Orbital Reproduction
+on:
+  workflow_dispatch:
+  push:
+    paths: ['runtime/external_reproduction.py','requirements-external.txt','.github/workflows/external-reproduction.yml']
+permissions:
+  contents: read
+jobs:
+  external-reproduction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.10'}
+      - run: pip install -r requirements-external.txt
+      - run: python runtime/external_reproduction.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: f123-external-reproduction
+          path: artifacts/f123_external_reproduction.json
